@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { UsersRepository } from '../../domain/repositories/users-repository.interface';
-import { User } from '../../domain/entities/user.entity';
+import { UsersRepository } from '../../../domain/repositories/users-repository.interface';
+import { User } from '../../../domain/entities/user.entity';
 
 interface RegisterUserRequest {
   name: string;
