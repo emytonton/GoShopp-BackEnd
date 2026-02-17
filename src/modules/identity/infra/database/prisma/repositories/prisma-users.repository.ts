@@ -24,4 +24,12 @@ export class PrismaUsersRepository implements UsersRepository {
     if (!user) return null;
     return PrismaUserMapper.toDomain(user);
   }
+
+  async save(user: User): Promise<void> {
+    const data = PrismaUserMapper.toPersistence(user);
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data,
+    });
+  }
 }
