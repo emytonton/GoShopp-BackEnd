@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { RegisterUserUseCase } from './register-user.use-case';
 import { User } from '../../../domain/entities/user.entity';
 import { UsersRepository } from '../../../domain/repositories/users-repository.interface';
@@ -18,9 +19,13 @@ describe('Register User Use Case', () => {
     registerUserUseCase = new RegisterUserUseCase(mockUsersRepository);
   });
 
-  it('should be able to register a new user', async () => {
+  it('should be able to register a new user with hashed password', async () => {
     mockUsersRepository.findByEmail.mockResolvedValue(null);
     const createSpy = jest.spyOn(mockUsersRepository, 'create');
+
+    const hashSpy = jest
+      .spyOn(bcrypt, 'hash')
+      .mockResolvedValue('fake_hash' as never);
 
     const result = await registerUserUseCase.execute({
       name: 'John Doe',
@@ -30,6 +35,7 @@ describe('Register User Use Case', () => {
 
     expect(result).toHaveProperty('userId');
     expect(createSpy).toHaveBeenCalled();
+    expect(hashSpy).toHaveBeenCalledWith('123456', 10);
   });
 
   it('should not be able to register with an existing email', async () => {
