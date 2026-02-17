@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { PrismaService } from '@shared/infra/prisma.service';
+import { PrismaService } from '../../shared/infra/prisma.service';
 
 import { UsersRepository } from './domain/repositories/users-repository.interface';
 import { PrismaUsersRepository } from './infra/database/prisma/repositories/prisma-users.repository';
