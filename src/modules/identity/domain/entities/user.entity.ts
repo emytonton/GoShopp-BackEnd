@@ -23,6 +23,10 @@ export class User extends Entity<UserProps> {
     return this.props.createdAt;
   }
 
+  get updatedAt() {
+    return this.props.updatedAt;
+  }
+
   // Factory Method: A única forma de criar um usuário novo
   // Isso nos permite validar regras ANTES do objeto existir
   static create(props: UserProps, id?: string): User {
