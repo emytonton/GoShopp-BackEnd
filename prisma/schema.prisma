@@ -16,3 +16,13 @@ model User {
 
   @@map("users")
 }
+
+model Store {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId     String   @unique @db.ObjectId
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+
+  @@map("stores")
+}
