@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
-import { GetUserProfileUseCase } from '../../application/use-cases/get-user-profile.use-case';
-import { UpdateUserUseCase } from '../../application/use-cases/update-user.use-case';
-import { DeleteUserUseCase } from '../../application/use-cases/delete-user.use-case';
+import { GetUserProfileUseCase } from '../../application/use-cases/get-user-profile/get-user-profile.use-case';
+import { UpdateUserUseCase } from '../../application/use-cases/update-user/update-user.use-case';
+import { DeleteUserUseCase } from '../../application/use-cases/delete-user/delete-user.use-case';
 
 @Controller('users')
 export class UserProfileController {

@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { RegisterUserUseCase } from '../../application/use-cases/register-user.use-case';
+import { RegisterUserUseCase } from '../../application/use-cases/register-user/register-user.use-case';
 
 interface RegisterUserBody {
   name: string;
