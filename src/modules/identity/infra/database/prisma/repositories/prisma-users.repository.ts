@@ -26,10 +26,11 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
   async save(user: User): Promise<void> {
-    const data = PrismaUserMapper.toPersistence(user);
+    const { id, ...dataToUpdate } = PrismaUserMapper.toPersistence(user);
+
     await this.prisma.user.update({
-      where: { id: user.id },
-      data,
+      where: { id },
+      data: dataToUpdate,
     });
   }
 }
