@@ -1,9 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { GetUserProfileUseCase } from '../../application/use-cases/get-user-profile/get-user-profile.use-case';
 import { UpdateUserUseCase } from '../../application/use-cases/update-user/update-user.use-case';
 import { DeleteUserUseCase } from '../../application/use-cases/delete-user/delete-user.use-case';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UserProfileController {
   constructor(
     private getProfile: GetUserProfileUseCase,
