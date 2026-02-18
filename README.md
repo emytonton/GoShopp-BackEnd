@@ -1,98 +1,93 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🛒 GoShopp API - Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://www.prisma.io/)
+[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+[![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)](https://jestjs.io/)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+> **Status do Projeto:** 🚧 Em Desenvolvimento (Módulo de Identidade Concluído)
+> 
+> **Acesso Rápido:** [Status da API (Health Check) na Vercel](https://go-shopp-back-end.vercel.app/)
 
-## Description
+## 💻 Sobre o Projeto
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+O **GoShopp API** é o motor de backend de um marketplace digital. Este projeto foi concebido para não ser apenas mais um CRUD, mas sim uma demonstração prática da aplicação de conceitos avançados de engenharia de software no ecossistema Node.js. 
 
-## Project setup
+O objetivo principal é construir uma API escalável, de fácil manutenção e testável, separando rigorosamente as regras de negócio dos frameworks e bibliotecas externas.
 
+## 🏗️ Arquitetura e Padrões
+
+Este projeto foi desenhado seguindo os princípios da **Clean Architecture** (Arquitetura Limpa) e **Domain-Driven Design (DDD)** simplificado. A estrutura é dividida em camadas muito bem definidas:
+
+* **Domain (Core):** Contém as entidades de negócio puras (ex: `User`) e as interfaces dos repositórios. Totalmente isolada, não conhece banco de dados nem frameworks web.
+* **Application:** Onde residem os *Use Cases* (Casos de Uso), orquestrando as regras de negócio.
+* **Infra:** Implementações concretas de acesso a dados (Repositórios do Prisma, Mappers de conversão).
+* **Presentation:** A porta de entrada da aplicação (Controllers do NestJS, Auth Guards).
+
+## 🚀 Principais Funcionalidades (Até o momento)
+
+**Módulo de Identidade (Auth & Users):**
+- [x] Criação de contas com hash de senha seguro (`bcrypt`).
+- [x] Autenticação de usuários gerando Token de Acesso (`@nestjs/jwt`).
+- [x] Proteção de rotas com `AuthGuard` personalizado.
+- [x] Consulta de perfil, atualização de dados e remoção (Soft Delete).
+- [x] Rota pública de Health Check para monitoramento do deploy.
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Framework:** [NestJS](https://nestjs.com/)
+* **Linguagem:** [TypeScript](https://www.typescriptlang.org/) (com configuração rigorosa de ESLint e Prettier)
+* **Banco de Dados:** [MongoDB](https://www.mongodb.com/) (Atlas)
+* **ORM:** [Prisma](https://www.prisma.io/)
+* **Segurança:** JWT (JSON Web Tokens) e Bcrypt
+* **Testes:** [Jest](https://jestjs.io/) (Foco massivo em Testes Unitários isolados com mocks)
+* **Deploy / Infra:** Serverless via [Vercel](https://vercel.com/) utilizando o adapter `@vercel/node`.
+
+## ⚙️ Como rodar o projeto localmente
+
+Para rodar este projeto na sua máquina, você precisará do [Node.js](https://nodejs.org/) e de uma conta no [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (ou rodando local).
+
+**1. Clone o repositório:**
 ```bash
-$ npm install
+git clone [https://github.com/SEU_USUARIO/GoShopp.git](https://github.com/SEU_USUARIO/GoShopp.git)
+cd GoShopp
+```
+**2. Instale as dependências:**
+```bash
+npm install
 ```
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+**3. Configure as Variáveis de Ambiente:**
+Crie um arquivo `.env` na raiz do projeto e adicione a sua string de conexão:
+```env
+DATABASE_URL="mongodb+srv://<usuario>:<senha>@cluster0.abc.mongodb.net/goshopp?retryWrites=true&w=majority"
 ```
 
-## Run tests
-
+**4. Gere o Prisma Client:**
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npx prisma generate
 ```
 
-## Deployment
+**5. Inicie o Servidor:**
+```bash
+npm run start:dev
+```
+A API estará rodando em `http://localhost:3000`.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## 🧪 Como rodar os Testes
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+O projeto conta com uma suíte de testes unitários rápidos e isolados (não dependem de banco de dados).
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Para rodar todos os testes
+npm run test
+
+# Para rodar os testes em modo watch (desenvolvimento)
+npm run test:watch
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+*Desenvolvido  por [Emilly Paiva](https://www.linkedin.com/in/emillypaivabelo/).*
