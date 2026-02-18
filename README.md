@@ -38,11 +38,11 @@ Este projeto foi desenhado seguindo os princípios da **Clean Architecture** (Ar
 ## 🛠️ Tecnologias Utilizadas
 
 * **Framework:** [NestJS](https://nestjs.com/)
-* **Linguagem:** [TypeScript](https://www.typescriptlang.org/) (com configuração rigorosa de ESLint e Prettier)
-* **Banco de Dados:** [MongoDB](https://www.mongodb.com/) (Atlas)
+* **Linguagem:** [TypeScript](https://www.typescriptlang.org/) 
+* **Banco de Dados:** [MongoDB](https://www.mongodb.com/) 
 * **ORM:** [Prisma](https://www.prisma.io/)
 * **Segurança:** JWT (JSON Web Tokens) e Bcrypt
-* **Testes:** [Jest](https://jestjs.io/) (Foco massivo em Testes Unitários isolados com mocks)
+* **Testes:** [Jest](https://jestjs.io/) 
 * **Deploy / Infra:** Serverless via [Vercel](https://vercel.com/) utilizando o adapter `@vercel/node`.
 
 ## ⚙️ Como rodar o projeto localmente
