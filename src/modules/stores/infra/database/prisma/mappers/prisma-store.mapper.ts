@@ -11,7 +11,7 @@ export class PrismaStoreMapper {
       document: store.document,
       status: store.status,
       createdAt: store.createdAt,
-      updatedAt: store.updatedAt,
+      updatedAt: store.updatedAt ?? undefined,
     };
   }
 

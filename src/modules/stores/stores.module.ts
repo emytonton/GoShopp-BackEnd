@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt'; // Necessário para o AuthGuard funcion
 import { PrismaService } from '../../shared/infra/prisma.service';
 import { StoresController } from './presentation/controllers/stores.controller';
 import { CreateStoreUseCase } from './application/use-cases/create-store/create-store.use-case';
+import { GetMyStoreUseCase } from './application/use-cases/get-my-store/get-my-store.use-case';
 import { StoresRepository } from './domain/repositories/stores-repository.interface';
 import { PrismaStoresRepository } from './infra/database/prisma/repositories/prisma-stores.repository';
 
@@ -12,6 +13,7 @@ import { PrismaStoresRepository } from './infra/database/prisma/repositories/pri
   providers: [
     PrismaService,
     CreateStoreUseCase,
+    GetMyStoreUseCase,
     {
       provide: StoresRepository,
       useClass: PrismaStoresRepository,
