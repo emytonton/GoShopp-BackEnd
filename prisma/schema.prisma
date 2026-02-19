@@ -14,6 +14,23 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
   deletedAt    DateTime?
+  store Store?
 
   @@map("users")
+}
+
+model Store {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId     String   @unique @db.ObjectId 
+  name        String   @unique              
+  description String
+  document    String
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  
+  user        User     @relation(fields: [ownerId], references: [id])
+
+  @@map("stores")
 }
