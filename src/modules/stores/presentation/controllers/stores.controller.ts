@@ -6,11 +6,13 @@ import {
   Body,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common';
 import { CreateStoreUseCase } from '../../application/use-cases/create-store/create-store.use-case';
 import { GetMyStoreUseCase } from '../../application/use-cases/get-my-store/get-my-store.use-case';
 import { GetStoreByIdUseCase } from '../../application/use-cases/get-store-by-id/get-store-by-id.use-case';
-import { CreateStoreDto } from '../dtos/create-store.dto'; // <-- A importação que estava faltando!
+import { SearchStoresUseCase } from '../../application/use-cases/search-stores/search-stores.use-case';
+import { CreateStoreDto } from '../dtos/create-store.dto';
 import { AuthGuard } from '../../../identity/presentation/guards/auth.guard';
 
 interface AuthRequest {
@@ -26,6 +28,7 @@ export class StoresController {
     private readonly createStoreUseCase: CreateStoreUseCase,
     private readonly getMyStoreUseCase: GetMyStoreUseCase,
     private readonly getStoreByIdUseCase: GetStoreByIdUseCase,
+    private readonly searchStoresUseCase: SearchStoresUseCase,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -73,5 +76,17 @@ export class StoresController {
       status: store.status,
       createdAt: store.createdAt,
     };
+  }
+
+  @Get()
+  async search(@Query('q') query?: string) {
+    const { stores } = await this.searchStoresUseCase.execute({ query });
+    return stores.map((store) => ({
+      id: store.id,
+      name: store.name,
+      description: store.description,
+      status: store.status,
+      createdAt: store.createdAt,
+    }));
   }
 }

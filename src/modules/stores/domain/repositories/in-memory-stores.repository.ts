@@ -31,4 +31,13 @@ export class InMemoryStoresRepository implements StoresRepository {
     }
     return Promise.resolve();
   }
+  search(query?: string): Promise<Store[]> {
+    let filtered = this.items.filter((store) => store.status !== 'SUSPENDED');
+    if (query) {
+      filtered = filtered.filter((store) =>
+        store.name.toLowerCase().includes(query.toLowerCase()),
+      );
+    }
+    return Promise.resolve(filtered);
+  }
 }
