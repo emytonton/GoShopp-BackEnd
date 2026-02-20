@@ -27,5 +27,6 @@ import { PrismaStoresRepository } from './infra/database/prisma/repositories/pri
       useClass: PrismaStoresRepository,
     },
   ],
+  exports: [StoresRepository],
 })
 export class StoresModule {}
