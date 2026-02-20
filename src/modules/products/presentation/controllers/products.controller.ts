@@ -2,13 +2,17 @@ import {
   Controller,
   Post,
   Get,
+  Patch,
   Body,
   UseGuards,
   Request,
+  Param,
 } from '@nestjs/common';
 import { CreateProductUseCase } from '../../application/use-cases/create-product/create-product.use-case';
 import { GetMyProductsUseCase } from '../../application/use-cases/get-my-products/get-my-products.use-case';
-import { CreateProductDto } from '../dtos/create-product.dto'; // <-- O import que estava faltando!
+import { UpdateProductUseCase } from '../../application/use-cases/update-product/update-product.use-case';
+import { CreateProductDto } from '../dtos/create-product.dto';
+import { UpdateProductDto } from '../dtos/update-product.dto';
 import { AuthGuard } from '../../../identity/presentation/guards/auth.guard';
 
 interface AuthRequest {
@@ -20,6 +24,7 @@ export class ProductsController {
   constructor(
     private readonly createProductUseCase: CreateProductUseCase,
     private readonly getMyProductsUseCase: GetMyProductsUseCase,
+    private readonly updateProductUseCase: UpdateProductUseCase,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -61,5 +66,31 @@ export class ProductsController {
       status: product.status,
       createdAt: product.createdAt,
     }));
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch(':id')
+  async update(
+    @Request() req: AuthRequest,
+    @Param('id') productId: string,
+    @Body() body: UpdateProductDto,
+  ) {
+    const ownerId = req.user.sub;
+
+    const { product } = await this.updateProductUseCase.execute({
+      ownerId,
+      productId,
+      ...body,
+    });
+
+    return {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      status: product.status,
+      updatedAt: product.updatedAt,
+    };
   }
 }
