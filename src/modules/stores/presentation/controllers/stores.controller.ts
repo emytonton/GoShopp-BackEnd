@@ -8,6 +8,7 @@ import {
   Request,
   Query,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { UpdateStoreUseCase } from '../../application/use-cases/update-store/update-store.use-case';
 import { UpdateStoreDto } from '../dtos/update-store.dto';
@@ -15,6 +16,7 @@ import { CreateStoreUseCase } from '../../application/use-cases/create-store/cre
 import { GetMyStoreUseCase } from '../../application/use-cases/get-my-store/get-my-store.use-case';
 import { GetStoreByIdUseCase } from '../../application/use-cases/get-store-by-id/get-store-by-id.use-case';
 import { SearchStoresUseCase } from '../../application/use-cases/search-stores/search-stores.use-case';
+import { DeleteStoreUseCase } from '../../application/use-cases/delete-store/delete-store.use-case';
 import { CreateStoreDto } from '../dtos/create-store.dto';
 import { AuthGuard } from '../../../identity/presentation/guards/auth.guard';
 
@@ -33,6 +35,7 @@ export class StoresController {
     private readonly getStoreByIdUseCase: GetStoreByIdUseCase,
     private readonly searchStoresUseCase: SearchStoresUseCase,
     private readonly updateStoreUseCase: UpdateStoreUseCase,
+    private readonly deleteStoreUseCase: DeleteStoreUseCase,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -88,6 +91,14 @@ export class StoresController {
       status: store.status,
       updatedAt: store.updatedAt,
     };
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('me')
+  async delete(@Request() req: AuthRequest) {
+    const ownerId = req.user.sub;
+    await this.deleteStoreUseCase.execute({ ownerId });
+    return { message: 'Loja encerrada com sucesso.' };
   }
 
   @Get(':id')
