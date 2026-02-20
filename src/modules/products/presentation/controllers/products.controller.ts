@@ -1,6 +1,14 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { CreateProductUseCase } from '../../application/use-cases/create-product/create-product.use-case';
-import { CreateProductDto } from '../dtos/create-product.dto';
+import { GetMyProductsUseCase } from '../../application/use-cases/get-my-products/get-my-products.use-case';
+import { CreateProductDto } from '../dtos/create-product.dto'; // <-- O import que estava faltando!
 import { AuthGuard } from '../../../identity/presentation/guards/auth.guard';
 
 interface AuthRequest {
@@ -9,7 +17,10 @@ interface AuthRequest {
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly createProductUseCase: CreateProductUseCase) {}
+  constructor(
+    private readonly createProductUseCase: CreateProductUseCase,
+    private readonly getMyProductsUseCase: GetMyProductsUseCase,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Post()
@@ -32,5 +43,23 @@ export class ProductsController {
       stock: product.stock,
       status: product.status,
     };
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('me')
+  async getMyProducts(@Request() req: AuthRequest) {
+    const ownerId = req.user.sub;
+
+    const { products } = await this.getMyProductsUseCase.execute({ ownerId });
+
+    return products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      status: product.status,
+      createdAt: product.createdAt,
+    }));
   }
 }
