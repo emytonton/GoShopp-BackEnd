@@ -6,6 +6,7 @@ import { CreateStoreUseCase } from './application/use-cases/create-store/create-
 import { GetMyStoreUseCase } from './application/use-cases/get-my-store/get-my-store.use-case';
 import { SearchStoresUseCase } from './application/use-cases/search-stores/search-stores.use-case';
 import { GetStoreByIdUseCase } from './application/use-cases/get-store-by-id/get-store-by-id.use-case';
+import { UpdateStoreUseCase } from './application/use-cases/update-store/update-store.use-case';
 import { StoresRepository } from './domain/repositories/stores-repository.interface';
 import { PrismaStoresRepository } from './infra/database/prisma/repositories/prisma-stores.repository';
 
@@ -18,6 +19,7 @@ import { PrismaStoresRepository } from './infra/database/prisma/repositories/pri
     GetMyStoreUseCase,
     GetStoreByIdUseCase,
     SearchStoresUseCase,
+    UpdateStoreUseCase,
     {
       provide: StoresRepository,
       useClass: PrismaStoresRepository,

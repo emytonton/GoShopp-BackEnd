@@ -7,7 +7,10 @@ import {
   UseGuards,
   Request,
   Query,
+  Patch,
 } from '@nestjs/common';
+import { UpdateStoreUseCase } from '../../application/use-cases/update-store/update-store.use-case';
+import { UpdateStoreDto } from '../dtos/update-store.dto';
 import { CreateStoreUseCase } from '../../application/use-cases/create-store/create-store.use-case';
 import { GetMyStoreUseCase } from '../../application/use-cases/get-my-store/get-my-store.use-case';
 import { GetStoreByIdUseCase } from '../../application/use-cases/get-store-by-id/get-store-by-id.use-case';
@@ -29,6 +32,7 @@ export class StoresController {
     private readonly getMyStoreUseCase: GetMyStoreUseCase,
     private readonly getStoreByIdUseCase: GetStoreByIdUseCase,
     private readonly searchStoresUseCase: SearchStoresUseCase,
+    private readonly updateStoreUseCase: UpdateStoreUseCase,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -63,6 +67,26 @@ export class StoresController {
       document: store.document,
       status: store.status,
       createdAt: store.createdAt,
+    };
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('me')
+  async update(@Request() req: AuthRequest, @Body() body: UpdateStoreDto) {
+    const ownerId = req.user.sub;
+
+    const { store } = await this.updateStoreUseCase.execute({
+      ownerId,
+      name: body.name,
+      description: body.description,
+    });
+
+    return {
+      id: store.id,
+      name: store.name,
+      description: store.description,
+      status: store.status,
+      updatedAt: store.updatedAt,
     };
   }
 

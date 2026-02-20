@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../../../../shared/infra/prisma.service';
 import { StoresRepository } from '../../../../domain/repositories/stores-repository.interface';
 import { Store } from '../../../../domain/entities/store.entity';
@@ -26,16 +27,27 @@ export class PrismaStoresRepository implements StoresRepository {
   }
 
   async findByName(name: string): Promise<Store | null> {
-    const store = await this.prisma.store.findUnique({ where: { name } });
+    const store = await this.prisma.store.findFirst({ where: { name } });
     if (!store) return null;
     return PrismaStoreMapper.toDomain(store);
   }
 
   async save(store: Store): Promise<void> {
     const data = PrismaStoreMapper.toPrisma(store);
+
+    const updateData: Prisma.StoreUpdateInput = Object.entries(data).reduce(
+      (acc, [key, value]) => {
+        if (key !== 'id' && key !== 'ownerId') {
+          return { ...acc, [key]: value };
+        }
+        return acc;
+      },
+      {} as Prisma.StoreUpdateInput,
+    );
+
     await this.prisma.store.update({
       where: { id: data.id },
-      data,
+      data: updateData,
     });
   }
 

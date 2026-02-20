@@ -1,8 +1,8 @@
-import { Store as RawStore } from '@prisma/client';
+import { Store as RawStore, Prisma } from '@prisma/client';
 import { Store, StoreStatus } from '../../../../domain/entities/store.entity';
 
 export class PrismaStoreMapper {
-  static toPrisma(store: Store) {
+  static toPrisma(store: Store): Prisma.StoreUncheckedCreateInput {
     return {
       id: store.id,
       ownerId: store.ownerId,

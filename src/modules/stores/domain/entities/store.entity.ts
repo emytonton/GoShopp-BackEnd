@@ -72,4 +72,10 @@ export class Store extends Entity<StoreProps> {
 
     return store;
   }
+
+  public updateDetails(name?: string, description?: string) {
+    if (name) this.props.name = name;
+    if (description) this.props.description = description;
+    this.touch();
+  }
 }
