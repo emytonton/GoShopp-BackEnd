@@ -3,14 +3,17 @@ import {
   Post,
   Get,
   Patch,
+  Delete,
   Body,
   UseGuards,
   Request,
   Param,
+  HttpCode,
 } from '@nestjs/common';
 import { CreateProductUseCase } from '../../application/use-cases/create-product/create-product.use-case';
 import { GetMyProductsUseCase } from '../../application/use-cases/get-my-products/get-my-products.use-case';
 import { UpdateProductUseCase } from '../../application/use-cases/update-product/update-product.use-case';
+import { DeleteProductUseCase } from '../../application/use-cases/delete-product/delete-product.use-case';
 import { CreateProductDto } from '../dtos/create-product.dto';
 import { UpdateProductDto } from '../dtos/update-product.dto';
 import { AuthGuard } from '../../../identity/presentation/guards/auth.guard';
@@ -25,47 +28,26 @@ export class ProductsController {
     private readonly createProductUseCase: CreateProductUseCase,
     private readonly getMyProductsUseCase: GetMyProductsUseCase,
     private readonly updateProductUseCase: UpdateProductUseCase,
+    private readonly deleteProductUseCase: DeleteProductUseCase,
   ) {}
 
   @UseGuards(AuthGuard)
   @Post()
   async create(@Request() req: AuthRequest, @Body() body: CreateProductDto) {
-    const ownerId = req.user.sub;
-
     const { product } = await this.createProductUseCase.execute({
-      ownerId,
-      name: body.name,
-      description: body.description,
-      price: body.price,
-      stock: body.stock,
+      ownerId: req.user.sub,
+      ...body,
     });
-
-    return {
-      id: product.id,
-      storeId: product.storeId,
-      name: product.name,
-      price: product.price,
-      stock: product.stock,
-      status: product.status,
-    };
+    return product;
   }
 
   @UseGuards(AuthGuard)
   @Get('me')
   async getMyProducts(@Request() req: AuthRequest) {
-    const ownerId = req.user.sub;
-
-    const { products } = await this.getMyProductsUseCase.execute({ ownerId });
-
-    return products.map((product) => ({
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      stock: product.stock,
-      status: product.status,
-      createdAt: product.createdAt,
-    }));
+    const { products } = await this.getMyProductsUseCase.execute({
+      ownerId: req.user.sub,
+    });
+    return products;
   }
 
   @UseGuards(AuthGuard)
@@ -75,22 +57,21 @@ export class ProductsController {
     @Param('id') productId: string,
     @Body() body: UpdateProductDto,
   ) {
-    const ownerId = req.user.sub;
-
     const { product } = await this.updateProductUseCase.execute({
-      ownerId,
+      ownerId: req.user.sub,
       productId,
       ...body,
     });
+    return product;
+  }
 
-    return {
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      stock: product.stock,
-      status: product.status,
-      updatedAt: product.updatedAt,
-    };
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  @HttpCode(204)
+  async delete(@Request() req: AuthRequest, @Param('id') productId: string) {
+    await this.deleteProductUseCase.execute({
+      ownerId: req.user.sub,
+      productId,
+    });
   }
 }
