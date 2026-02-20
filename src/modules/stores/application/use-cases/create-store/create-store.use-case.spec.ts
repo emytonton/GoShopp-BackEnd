@@ -1,6 +1,6 @@
 import { CreateStoreUseCase } from './create-store.use-case';
 import { InMemoryStoresRepository } from '../../../domain/repositories/in-memory-stores.repository';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, BadRequestException } from '@nestjs/common';
 
 describe('CreateStoreUseCase', () => {
   let inMemoryStoresRepository: InMemoryStoresRepository;
@@ -16,7 +16,7 @@ describe('CreateStoreUseCase', () => {
       ownerId: 'user-123',
       name: 'Loja Teste',
       description: 'Descrição da loja teste',
-      document: '12345678900',
+      document: '12345678909',
     });
 
     expect(store.id).toBeTruthy();
@@ -29,7 +29,7 @@ describe('CreateStoreUseCase', () => {
       ownerId: 'user-123',
       name: 'Minha Primeira Loja',
       description: 'Desc',
-      document: '111',
+      document: '12345678909',
     });
 
     await expect(() =>
@@ -37,8 +37,19 @@ describe('CreateStoreUseCase', () => {
         ownerId: 'user-123',
         name: 'Minha Segunda Loja',
         description: 'Desc',
-        document: '222',
+        document: '98765432100',
       }),
     ).rejects.toBeInstanceOf(ConflictException);
+  });
+
+  it('não deve permitir a criação com CPF inválido', async () => {
+    await expect(() =>
+      sut.execute({
+        ownerId: 'user-999',
+        name: 'Loja Hacker',
+        description: 'Desc',
+        document: '11122233344',
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
   });
 });

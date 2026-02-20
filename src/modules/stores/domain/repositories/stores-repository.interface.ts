@@ -7,4 +7,5 @@ export abstract class StoresRepository {
   abstract findByName(name: string): Promise<Store | null>;
   abstract save(store: Store): Promise<void>;
   abstract search(query?: string): Promise<Store[]>;
+  abstract findByDocument(document: string): Promise<Store | null>;
 }

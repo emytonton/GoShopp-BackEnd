@@ -1,6 +1,11 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Store } from '../../../domain/entities/store.entity';
 import { StoresRepository } from '../../../domain/repositories/stores-repository.interface';
+import { DocumentValidator } from '../../../../../core/utils/document.validator';
 
 interface CreateStoreRequest {
   ownerId: string;
@@ -19,6 +24,20 @@ export class CreateStoreUseCase {
 
   async execute(request: CreateStoreRequest): Promise<CreateStoreResponse> {
     const { ownerId, name, description, document } = request;
+
+    if (!DocumentValidator.isValid(document)) {
+      throw new BadRequestException(
+        'O documento fornecido (CPF/CNPJ) é inválido.',
+      );
+    }
+
+    const documentAlreadyInUse =
+      await this.storesRepository.findByDocument(document);
+    if (documentAlreadyInUse) {
+      throw new ConflictException(
+        'Este documento já está vinculado a outra loja.',
+      );
+    }
 
     const storeExistsForUser =
       await this.storesRepository.findByOwnerId(ownerId);

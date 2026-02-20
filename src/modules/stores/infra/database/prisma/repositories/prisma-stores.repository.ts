@@ -32,6 +32,13 @@ export class PrismaStoresRepository implements StoresRepository {
     return PrismaStoreMapper.toDomain(store);
   }
 
+  // 👇 AQUI ESTÁ O NOVO MÉTODO (findByDocument) 👇
+  async findByDocument(document: string): Promise<Store | null> {
+    const store = await this.prisma.store.findFirst({ where: { document } });
+    if (!store) return null;
+    return PrismaStoreMapper.toDomain(store);
+  }
+
   async save(store: Store): Promise<void> {
     const data = PrismaStoreMapper.toPrisma(store);
 

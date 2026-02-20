@@ -40,4 +40,8 @@ export class InMemoryStoresRepository implements StoresRepository {
     }
     return Promise.resolve(filtered);
   }
+  findByDocument(document: string): Promise<Store | null> {
+    const store = this.items.find((item) => item.document === document);
+    return Promise.resolve(store ?? null);
+  }
 }
